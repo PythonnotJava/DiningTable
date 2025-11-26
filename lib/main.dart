@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'Compose/home.dart';
 import 'Compose/myself.dart';
+import 'Logic/file_system.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -58,6 +59,11 @@ class MyAppState extends State<MyApp> {
   }
 }
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// 全局初始化
+  await initAssetsDir();
+
   runApp(MyApp());
 }

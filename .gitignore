@@ -46,3 +46,4 @@ app.*.map.json
 
 build/
 windows/flutter/ephemeral/
+pubspec.lock
