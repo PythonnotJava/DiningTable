@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  static List<StatefulWidget> sheets = [
+  static List<Widget> sheets = [
     const HomePage(),
     const Myself()
   ];

@@ -3,6 +3,7 @@ import 'package:diningtable/Logic/file_system.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../Logic/card_info.dart';
 import 'card_item.dart';
@@ -66,7 +67,7 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ValueListenableBuilder(
+      body: ValueListenableBuilder<Box<CardInfo>>(
         valueListenable: cardsBox.listenable(),
         builder: (_, Box<CardInfo> box, _) {
           final query = searchController.text.toLowerCase().trim();
@@ -81,12 +82,29 @@ class HomePageState extends State<HomePage> {
             return const EmptyStateWidget(title: Text('没有卡片哦~'));
           }
 
-          return ListView.builder(
-            itemCount: cards.length,
-            itemBuilder: (_, index) {
-              final CardInfo cardInfo = cards[index];
-              return CardItem(cardInfo: cardInfo, key: ValueKey(cardInfo.key));
-            },
+          return AnimationLimiter(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: cards.length,
+              itemBuilder: (_, index) {
+                final CardInfo cardInfo = cards[index];
+
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 475),
+                  child: SlideAnimation(
+                    verticalOffset: 80.0,
+                    child: FadeInAnimation(
+                      delay: const Duration(milliseconds: 100),
+                      child: CardItem(
+                        cardInfo: cardInfo,
+                        key: ValueKey(cardInfo.key),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),

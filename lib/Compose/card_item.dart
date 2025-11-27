@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../Logic/card_info.dart';
+import 'expand_widget.dart';
 
 class CardItem extends StatefulWidget {
   final CardInfo cardInfo;
@@ -11,7 +12,6 @@ class CardItem extends StatefulWidget {
 }
 
 class CardItemState extends State<CardItem> {
-
   late final CardInfo cardInfo;
 
   @override
@@ -52,7 +52,12 @@ class CardItemState extends State<CardItem> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.expand_more),
-                  onPressed: (){},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ExpandCardPage(cardInfo: cardInfo),
+                    ),
+                  ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -73,10 +78,7 @@ class CardItemState extends State<CardItem> {
                 Expanded(
                   child: Text(
                     cardInfo.sign,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               ],
@@ -86,10 +88,7 @@ class CardItemState extends State<CardItem> {
               cardInfo.content,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
-                height: 1.5,
-              ),
+              style: const TextStyle(fontSize: 14, height: 1.5),
             ),
             const SizedBox(height: 8),
             Align(
