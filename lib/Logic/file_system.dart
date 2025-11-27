@@ -18,6 +18,9 @@ late final Box<CardInfo> cardsBox;
 
 late final bool isPc;
 
+/// 两个空格缩进
+const prettyEncoder = JsonEncoder.withIndent('  ');
+
 Future<void> initAssetsDir() async {
   isPc = Platform.isLinux || Platform.isWindows || Platform.isMacOS;
 
@@ -42,9 +45,7 @@ Future<void> initAssetsDir() async {
   configFile = File("${assetsDir.path}/config.json");
   if (!await configFile.exists()) {
     await configFile.create(recursive: true);
-    await configFile.writeAsString(jsonEncode({
-      "pwd" : null
-    }));
+    await configFile.writeAsString(prettyEncoder.convert({"pwd": null}));
   }
 
   configFileData = jsonDecode(await configFile.readAsString());
@@ -70,3 +71,8 @@ Future<void> initAssetsDir() async {
   debugPrint("\thive cards database初始化完毕: ${hiveDir.path}");
 }
 
+Future<void> writeToConfigJson({required String key, dynamic value}) async {
+  /// 内容极其少
+  configFileData[key] = value;
+  await configFile.writeAsString(prettyEncoder.convert(configFileData));
+}

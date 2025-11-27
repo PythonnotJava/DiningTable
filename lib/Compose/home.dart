@@ -69,7 +69,7 @@ class HomePageState extends State<HomePage> {
       ),
       body: ValueListenableBuilder<Box<CardInfo>>(
         valueListenable: cardsBox.listenable(),
-        builder: (_, Box<CardInfo> box, _) {
+        builder: (_, Box<CardInfo> box, __) {
           final query = searchController.text.toLowerCase().trim();
 
           final cards = box.values.where((c) {
