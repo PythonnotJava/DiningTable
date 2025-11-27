@@ -12,19 +12,19 @@ class CardInfo {
   @HiveField(1)
   final String sign;
 
-  /// 内容
+  /// 内容，可变
   @HiveField(2)
-  final String content;
+  String content;
 
   /// 唯一键值对，同时充当hive的记录键
   @HiveField(3)
   final String key;
 
-  /// 记录时间
+  /// 记录时间，自动可变
   @HiveField(4)
-  final String time;
+  String time;
 
-  const CardInfo({
+  CardInfo({
     required this.target,
     required this.sign,
     required this.content,

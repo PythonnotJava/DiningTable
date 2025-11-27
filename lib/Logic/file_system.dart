@@ -42,7 +42,9 @@ Future<void> initAssetsDir() async {
   configFile = File("${assetsDir.path}/config.json");
   if (!await configFile.exists()) {
     await configFile.create(recursive: true);
-    await configFile.writeAsString(jsonEncode({}));
+    await configFile.writeAsString(jsonEncode({
+      "pwd" : null
+    }));
   }
 
   configFileData = jsonDecode(await configFile.readAsString());
@@ -67,3 +69,4 @@ Future<void> initAssetsDir() async {
   debugPrint("\tconfig.json初始化完毕: ${configFile.path}");
   debugPrint("\thive cards database初始化完毕: ${hiveDir.path}");
 }
+

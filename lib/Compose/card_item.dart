@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:diningtable/Logic/file_system.dart';
 import 'package:flutter/material.dart';
 
 import '../Logic/card_info.dart';
@@ -5,14 +8,17 @@ import 'expand_widget.dart';
 
 class CardItem extends StatefulWidget {
   final CardInfo cardInfo;
-  const CardItem({super.key, required this.cardInfo});
+  final Future<void> Function({CardInfo? editInfo}) editFunc;
+  const CardItem({super.key, required this.cardInfo, required this.editFunc});
 
   @override
   State<StatefulWidget> createState() => CardItemState();
 }
 
-class CardItemState extends State<CardItem> {
+class CardItemState extends State<CardItem> with TickerProviderStateMixin {
   late final CardInfo cardInfo;
+
+  bool expanded = false;
 
   @override
   void initState() {
@@ -50,8 +56,9 @@ class CardItemState extends State<CardItem> {
                     ),
                   ),
                 ),
+
                 IconButton(
-                  icon: const Icon(Icons.expand_more),
+                  icon: const Icon(Icons.pages_outlined, color: Colors.grey),
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -61,9 +68,22 @@ class CardItemState extends State<CardItem> {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
+
+                const SizedBox(width: 10),
+
+                IconButton(
+                  icon: Icon(
+                    expanded ? Icons.expand_less : Icons.expand_more,
+                  ),
+                  onPressed: () => setState(() => expanded = !expanded),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
               ],
             ),
+
             const SizedBox(height: 8),
+
             Row(
               children: [
                 Container(
@@ -83,21 +103,66 @@ class CardItemState extends State<CardItem> {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
-            Text(
-              cardInfo.content,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, height: 1.5),
+
+            AnimatedSize(
+              duration: Duration(milliseconds: math.min(cardInfo.content.length ~/ 10, 500).clamp(200, 500)),
+              curve: Curves.easeInOut,
+              child: expanded
+                  ? Text(
+                cardInfo.content,
+                style: const TextStyle(fontSize: 14, height: 1.5),
+              )
+                  : Text(
+                cardInfo.content,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 14, height: 1.5),
+              ),
             ),
+
             const SizedBox(height: 8),
+
             Align(
               alignment: Alignment.bottomRight,
-              child: IconButton(
+              child: PopupMenuButton<int>(
                 icon: const Icon(Icons.more_horiz),
-                onPressed: () {},
                 padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                onSelected: (value) {
+                  switch (value) {
+                    case 0:
+                      widget.editFunc(editInfo: widget.cardInfo);
+                      break;
+                    case 1:
+                      cardsBox.delete(cardInfo.key);
+                      break;
+                    default:
+                      debugPrint("Can't find the value.");
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 0,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.edit, size: 20),
+                        SizedBox(width: 10),
+                        Text("编辑"),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 1,
+                    child: Row(
+                      children: const [
+                        Icon(Icons.delete_outline, size: 20),
+                        SizedBox(width: 10),
+                        Text("删除"),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

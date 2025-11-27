@@ -1,10 +1,10 @@
-import 'package:diningtable/Compose/empty_widget.dart';
-import 'package:diningtable/Logic/file_system.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import '../Compose/empty_widget.dart';
+import '../Logic/file_system.dart';
 import '../Logic/card_info.dart';
 import 'card_item.dart';
 
@@ -61,7 +61,7 @@ class HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: appendToHive,
+            onPressed: appendOrEditToHive,
             icon: const Icon(Icons.add_circle_outline),
             color: Colors.blue,
           ),
@@ -99,6 +99,7 @@ class HomePageState extends State<HomePage> {
                       child: CardItem(
                         cardInfo: cardInfo,
                         key: ValueKey(cardInfo.key),
+                        editFunc: appendOrEditToHive,
                       ),
                     ),
                   ),
@@ -111,11 +112,25 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  /// 弹出对话框：添加一条 CardInfo
-  Future<void> appendToHive() async {
+  /// 弹出对话框：添加或者修改一条 CardInfo
+  /// 修改时，只能修改内容，其他两个禁用
+  Future<void> appendOrEditToHive({
+    CardInfo? editInfo
+  }) async {
+
     contentController.clear();
     signController.clear();
     targetController.clear();
+
+    /// 编辑模式
+    bool edit = false;
+
+    if (editInfo != null) {
+      contentController.text = editInfo.content;
+      signController.text = editInfo.sign;
+      targetController.text = editInfo.target;
+      edit = true;
+    }
 
     bool isTargetEmptyChecked = false;
     bool isSignEmptyChecked = false;
@@ -161,6 +176,7 @@ class HomePageState extends State<HomePage> {
                           child: Column(
                             children: [
                               TextField(
+                                enabled: !edit,
                                 controller: targetController,
                                 maxLines: null,
                                 maxLength: 100,
@@ -176,6 +192,7 @@ class HomePageState extends State<HomePage> {
                                 ),
                               const SizedBox(height: 16),
                               TextField(
+                                enabled: !edit,
                                 controller: signController,
                                 maxLines: null,
                                 maxLength: 100,
@@ -211,20 +228,27 @@ class HomePageState extends State<HomePage> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              isTargetEmptyChecked = targetController.text.trim().isEmpty;
-                              isSignEmptyChecked = signController.text.trim().isEmpty;
-                            });
-                            if (!isTargetEmptyChecked && !isSignEmptyChecked) {
-                              final info = CardInfo(
-                                key: uuidGen.v1(),
-                                time: DateTime.now().toString(),
-                                target: targetController.text.trim(),
-                                sign: signController.text.trim(),
-                                content: contentController.text.trim(),
-                              );
-                              cardsBox.put(info.key, info);
+                            if (edit){
+                              editInfo!.content = contentController.text.trim();
+                              editInfo.time = DateTime.now().toString();
+                              cardsBox.put(editInfo.key, editInfo);
                               Navigator.pop(context);
+                            } else {
+                              setState(() {
+                                isTargetEmptyChecked = targetController.text.trim().isEmpty;
+                                isSignEmptyChecked = signController.text.trim().isEmpty;
+                              });
+                              if (!isTargetEmptyChecked && !isSignEmptyChecked) {
+                                final info = CardInfo(
+                                  key: uuidGen.v1(),
+                                  time: DateTime.now().toString(),
+                                  target: targetController.text.trim(),
+                                  sign: signController.text.trim(),
+                                  content: contentController.text.trim(),
+                                );
+                                cardsBox.put(info.key, info);
+                                Navigator.pop(context);
+                              }
                             }
                           },
                           child: const Text("确定"),
