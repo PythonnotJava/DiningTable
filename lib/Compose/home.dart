@@ -191,11 +191,6 @@ class HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("取消"),
-                        ),
-                        const SizedBox(width: 12),
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -215,6 +210,11 @@ class HomePageState extends State<HomePage> {
                             }
                           },
                           child: const Text("确定"),
+                        ),
+                        const SizedBox(width: 12),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("取消"),
                         ),
                         const SizedBox(width: 16),
                       ],
