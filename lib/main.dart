@@ -89,7 +89,7 @@ Future<void> main() async {
 
   /// PC限制
   if (isPc){
-    window_size.setWindowMinSize(const Size(800, 600));
+    window_size.setWindowMinSize(const Size(400, 600));
   }
 
   runApp(const MainApp());

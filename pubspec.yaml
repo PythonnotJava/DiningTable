@@ -50,13 +50,23 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  macos: true
-  windows: true
-  linux: true
+  image_path: "assets/img/app_icon.png"
+
   web:
     generate: true
     image_path: "assets/img/app_icon.png"
-  image_path: "assets/img/app_icon.png"
+
+  macos:
+    generate: true
+    image_path: "assets/img/app_icon.png"
+
+  windows:
+    generate: true
+    image_path: "assets/img/app_icon.png"
+
+  linux:
+    generate: true
+    image_path: "assets/img/app_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
