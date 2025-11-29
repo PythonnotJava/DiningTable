@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:window_size/window_size.dart' as window_size;
 
 import 'Compose/my_app.dart';
 import 'Logic/file_system.dart';
@@ -85,6 +86,11 @@ Future<void> main() async {
 
   /// 全局初始化
   await initAssetsDir();
+
+  /// PC限制
+  if (isPc){
+    window_size.setWindowMinSize(const Size(800, 600));
+  }
 
   runApp(const MainApp());
 }

@@ -1,3 +1,4 @@
+import 'package:diningtable/Compose/renew_pwd.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -92,12 +93,7 @@ class MyselfState extends State<Myself> {
                   leading: Icon(Icons.lock_outline, color: Colors.purple),
                   title: Text("修改密码"),
                   trailing: Icon(Icons.chevron_right),
-                  onTap: () {
-                    // TODO: 跳转修改密码页
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text("开发中…")));
-                  },
+                  onTap: () => showChangePasswordDialog(context)
                 ),
 
                 ExpansionTile(

@@ -88,7 +88,7 @@ class _VerifyPasswordPageState extends State<VerifyPasswordPage> {
 
                     if (!isChecking && !showAngry)
                       Image.asset(
-                        'assets/img/angry.png', // 初始也用 angry 或者用其他图都行
+                        'assets/img/guess.png', // 初始
                         width: 100,
                         height: 100,
                         color: Colors.grey[400],
