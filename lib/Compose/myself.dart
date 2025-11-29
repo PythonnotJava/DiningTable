@@ -96,36 +96,6 @@ class MyselfState extends State<Myself> {
                   onTap: () => showChangePasswordDialog(context)
                 ),
 
-                ExpansionTile(
-                  leading: Icon(Icons.palette_outlined, color: Colors.orange),
-                  title: Text("主题设置"),
-                  childrenPadding: EdgeInsets.only(
-                    left: 72,
-                    right: 16,
-                    bottom: 8,
-                  ),
-                  children: [
-                    RadioListTile<ThemeMode>(
-                      title: Text("白天模式"),
-                      value: ThemeMode.light,
-                      groupValue:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? ThemeMode.dark
-                          : ThemeMode.light,
-                      onChanged: (v) {},
-                    ),
-                    RadioListTile<ThemeMode>(
-                      title: Text("暗夜模式"),
-                      value: ThemeMode.dark,
-                      groupValue:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? ThemeMode.dark
-                          : ThemeMode.light,
-                      onChanged: (v) {},
-                    ),
-                  ],
-                ),
-
                 SizedBox(height: 20),
                 Center(
                   child: Column(
