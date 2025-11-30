@@ -11,15 +11,6 @@ class Myself extends StatefulWidget {
 }
 
 class MyselfState extends State<Myself> {
-  late int seed;
-  late String style;
-
-  @override
-  void initState() {
-    seed = DateTime.now().millisecondsSinceEpoch;
-    style = randomStyle();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +58,7 @@ class MyselfState extends State<Myself> {
                                 ),
                               ],
                             ),
-                            child: InkWell(
-                              child: ClipOval(child: RandomAvatar(seed: seed, style: style,)),
-                              onTap: () => setState(() {
-                                seed = DateTime.now().millisecondsSinceEpoch;
-                                style = randomStyle();
-                              }),
-                            ),
+                            child: const RandomAvatar(),
                           ),
                           const SizedBox(height: 50),
                         ],
