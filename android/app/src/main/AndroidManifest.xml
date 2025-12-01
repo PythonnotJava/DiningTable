@@ -2,7 +2,7 @@
     <!--联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="diningtable"
+        android:label="DiningTable"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
