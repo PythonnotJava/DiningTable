@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../Compose/empty_widget.dart';
 import '../Logic/file_system.dart';
 import '../Logic/card_info.dart';
 import 'card_item.dart';
-
-const uuidGen = Uuid();
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -240,7 +237,7 @@ class HomePageState extends State<HomePage> {
                               });
                               if (!isTargetEmptyChecked && !isSignEmptyChecked) {
                                 final info = CardInfo(
-                                  key: uuidGen.v1(),
+                                  key: getNextCardId().toString(),
                                   time: DateTime.now().toString(),
                                   target: targetController.text.trim(),
                                   sign: signController.text.trim(),

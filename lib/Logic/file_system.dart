@@ -15,7 +15,8 @@ late final File configFile;
 late final Map<String, dynamic> configFileData;
 late final Directory hiveDir;
 late final Box<CardInfo> cardsBox;
-
+/// 计数器
+late final Box<int> metaBox;
 late final bool isPc;
 
 /// 两个空格缩进
@@ -66,6 +67,14 @@ Future<void> initAssetsDir() async {
   /// 打开 Box 并赋值
   cardsBox = await Hive.openBox<CardInfo>('cards_box');
 
+  /// 在打开 cardsBox 之前或之后加上这几行
+  metaBox = await Hive.openBox<int>('meta_box');
+
+  /// 初始化计数器（只有第一次会执行）
+  if (!metaBox.containsKey('card_counter')) {
+    await metaBox.put('card_counter', 0);
+  }
+
   debugPrint(">>> 资产目录初始化完毕: ${assetsDir.path}");
   debugPrint("\tconfig.json初始化完毕: ${configFile.path}");
   debugPrint("\thive cards database初始化完毕: ${hiveDir.path}");
@@ -75,4 +84,11 @@ Future<void> writeToConfigJson({required String key, dynamic value}) async {
   /// 内容极其少
   configFileData[key] = value;
   await configFile.writeAsString(prettyEncoder.convert(configFileData));
+}
+
+int getNextCardId() {
+  int current = metaBox.get('card_counter', defaultValue: 0)!;
+  current++;
+  metaBox.put('card_counter', current);
+  return current;
 }
