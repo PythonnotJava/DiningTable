@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -19,6 +20,10 @@ class HomePageState extends State<HomePage> {
   late final TextEditingController signController;
   late final TextEditingController contentController;
   late final TextEditingController searchController;
+  late bool sortId;
+
+  /// 切换的时候禁用按钮防止卡顿
+  late bool btnEnable;
 
   @override
   void initState() {
@@ -26,6 +31,11 @@ class HomePageState extends State<HomePage> {
     signController = TextEditingController();
     contentController = TextEditingController();
     searchController = TextEditingController();
+
+    /// false表示从早到晚排序
+    sortId = configFileData['sortId'];
+
+    btnEnable = true;
 
     /// 添加监听：输入搜索文字时刷新 UI
     searchController.addListener(() {
@@ -58,8 +68,29 @@ class HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: appendOrEditToHive,
+            onPressed: btnEnable ? appendOrEditToHive : null,
             icon: const Icon(Icons.add_circle_outline),
+            color: Colors.blue,
+          ),
+          IconButton(
+            onPressed: btnEnable
+                ? () async {
+                    setState(() {
+                      btnEnable = false;
+                      sortId = !sortId;
+                    });
+                    await writeToConfigJson(key: 'sortId', value: sortId);
+                    /// 延迟防止卡顿
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      setState(() {
+                        btnEnable = true;
+                      });
+                    });
+                  }
+                : null,
+            icon: sortId
+                ? const Icon(Icons.arrow_upward)
+                : const Icon(Icons.arrow_downward),
             color: Colors.blue,
           ),
         ],
@@ -74,6 +105,13 @@ class HomePageState extends State<HomePage> {
             return c.target.toLowerCase().contains(query) ||
                 c.sign.toLowerCase().contains(query);
           }).toList();
+
+          /// 利用了新卡片的key只会比上一个卡片key更大的特点
+          cards.sort((a, b) {
+            final idA = int.parse(a.key);
+            final idB = int.parse(b.key);
+            return sortId ? idB.compareTo(idA) : idA.compareTo(idB);
+          });
 
           if (cards.isEmpty) {
             return const EmptyStateWidget(title: Text('没有卡片哦~'));
@@ -111,10 +149,7 @@ class HomePageState extends State<HomePage> {
 
   /// 弹出对话框：添加或者修改一条 CardInfo
   /// 修改时，只能修改内容，其他两个禁用
-  Future<void> appendOrEditToHive({
-    CardInfo? editInfo
-  }) async {
-
+  Future<void> appendOrEditToHive({CardInfo? editInfo}) async {
     contentController.clear();
     signController.clear();
     targetController.clear();
@@ -206,6 +241,8 @@ class HomePageState extends State<HomePage> {
                               const SizedBox(height: 16),
                               TextField(
                                 controller: contentController,
+                                keyboardType: TextInputType.multiline,
+                                textInputAction: TextInputAction.newline,
                                 maxLines: null,
                                 maxLength: 10000,
                                 minLines: 6,
@@ -225,17 +262,22 @@ class HomePageState extends State<HomePage> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            if (edit){
+                            if (edit) {
                               editInfo!.content = contentController.text.trim();
                               editInfo.time = DateTime.now().toString();
                               cardsBox.put(editInfo.key, editInfo);
                               Navigator.pop(context);
                             } else {
                               setState(() {
-                                isTargetEmptyChecked = targetController.text.trim().isEmpty;
-                                isSignEmptyChecked = signController.text.trim().isEmpty;
+                                isTargetEmptyChecked = targetController.text
+                                    .trim()
+                                    .isEmpty;
+                                isSignEmptyChecked = signController.text
+                                    .trim()
+                                    .isEmpty;
                               });
-                              if (!isTargetEmptyChecked && !isSignEmptyChecked) {
+                              if (!isTargetEmptyChecked &&
+                                  !isSignEmptyChecked) {
                                 final info = CardInfo(
                                   key: getNextCardId().toString(),
                                   time: DateTime.now().toString(),

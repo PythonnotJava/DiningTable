@@ -46,7 +46,7 @@ Future<void> initAssetsDir() async {
   configFile = File("${assetsDir.path}/config.json");
   if (!await configFile.exists()) {
     await configFile.create(recursive: true);
-    await configFile.writeAsString(prettyEncoder.convert({"pwd": null}));
+    await configFile.writeAsString(prettyEncoder.convert({"pwd": null, "sortId" : false}));
   }
 
   configFileData = jsonDecode(await configFile.readAsString());
