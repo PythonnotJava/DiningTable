@@ -45,5 +45,48 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- 局域网共享：相机扫码权限说明 -->
+	<key>NSCameraUsageDescription</key>
+	<string>需要使用相机扫描二维码以接收对方分享的卡片</string>
+	<!-- 局域网共享：本地网络访问说明（iOS 14+ 必需，否则无法连接同网段设备） -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>需要访问本地网络以在同一 Wi-Fi 下与附近设备面对面共享卡片</string>
+	<!-- 文件关联：声明可打开 .hive 文档类型，让其他 App 能"用 DiningTable 打开" -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>DiningTable 数据文件</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.pythonnotjava.diningtable.hive</string>
+			</array>
+		</dict>
+	</array>
+	<!-- 导出自定义 UTI：.hive 后缀 -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.pythonnotjava.diningtable.hive</string>
+			<key>UTTypeDescription</key>
+			<string>DiningTable 数据文件</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hive</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -1,9 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!--联网权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--局域网共享：相机扫码 + 读取网络状态 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
         android:label="DiningTable"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -25,6 +31,25 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- 文件关联：用 DiningTable 打开 .hive 数据文件（作为 App 内导入的补充） -->
+            <!-- content:// 形式：文件管理器/微信/QQ 等多通过此方式传递，
+                 URI 路径不含扩展名，只能按 MIME 匹配。
+                 .hive 无系统 MIME，未知文件通常被标记为 application/octet-stream。 -->
+            <intent-filter android:label="DiningTable 导入">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" android:mimeType="application/octet-stream" />
+            </intent-filter>
+            <!-- file:// 形式：URI 路径含真实文件名，按 .hive 扩展名匹配 -->
+            <intent-filter android:label="DiningTable 导入">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.hive" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

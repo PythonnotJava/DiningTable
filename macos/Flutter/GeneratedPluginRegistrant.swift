@@ -5,10 +5,14 @@
 import FlutterMacOS
 import Foundation
 
-import path_provider_foundation
+import file_picker
+import mobile_scanner
+import share_plus
 import window_size
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
+  FilePickerPlugin.register(with: registry.registrar(forPlugin: "FilePickerPlugin"))
+  MobileScannerPlugin.register(with: registry.registrar(forPlugin: "MobileScannerPlugin"))
+  SharePlusMacosPlugin.register(with: registry.registrar(forPlugin: "SharePlusMacosPlugin"))
   WindowSizePlugin.register(with: registry.registrar(forPlugin: "WindowSizePlugin"))
 }

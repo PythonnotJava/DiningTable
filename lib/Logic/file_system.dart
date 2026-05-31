@@ -92,3 +92,40 @@ int getNextCardId() {
   metaBox.put('card_counter', current);
   return current;
 }
+
+/// 永久合并：把一批 CardInfo 写入 cardsBox。
+/// 对 key 相同的卡片直接跳过（不覆盖本机已有数据）。
+/// 合并完成后修正本机计数器，确保后续新增卡片的 key 不会与导入数据撞车。
+///
+/// 返回 [新增数量, 跳过数量]。
+List<int> mergeCards(List<CardInfo> incoming) {
+  int added = 0;
+  int skipped = 0;
+  int maxKey = metaBox.get('card_counter', defaultValue: 0)!;
+
+  for (final card in incoming) {
+    if (card.key.isEmpty) {
+      skipped++;
+      continue;
+    }
+    if (cardsBox.containsKey(card.key)) {
+      /// key 相同，跳过
+      skipped++;
+    } else {
+      cardsBox.put(card.key, card);
+      added++;
+    }
+    /// 记录见过的最大数字 key，用于推进计数器
+    final parsed = int.tryParse(card.key);
+    if (parsed != null && parsed > maxKey) {
+      maxKey = parsed;
+    }
+  }
+
+  /// 推进计数器到已见过的最大 key，避免后续 getNextCardId 生成重复 key
+  if (maxKey > metaBox.get('card_counter', defaultValue: 0)!) {
+    metaBox.put('card_counter', maxKey);
+  }
+
+  return [added, skipped];
+}

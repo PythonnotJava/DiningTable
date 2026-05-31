@@ -31,4 +31,22 @@ class CardInfo {
     required this.key,
     required this.time
   });
+
+  /// 序列化为 Map，用于局域网传输 / 导出
+  Map<String, dynamic> toJson() => {
+    'target': target,
+    'sign': sign,
+    'content': content,
+    'key': key,
+    'time': time,
+  };
+
+  /// 从 Map 反序列化，字段缺失时回退为空串，保证健壮性
+  factory CardInfo.fromJson(Map<String, dynamic> json) => CardInfo(
+    target: (json['target'] ?? '').toString(),
+    sign: (json['sign'] ?? '').toString(),
+    content: (json['content'] ?? '').toString(),
+    key: (json['key'] ?? '').toString(),
+    time: (json['time'] ?? '').toString(),
+  );
 }

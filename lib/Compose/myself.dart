@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'random_avatar.dart';
+import 'share_hub_page.dart';
 
 class Myself extends StatefulWidget {
   const Myself({super.key});
@@ -81,12 +82,27 @@ class MyselfState extends State<Myself> {
                   onTap: () => showChangePasswordDialog(context)
                 ),
 
+                // 分享与同步
+                ListTile(
+                  leading: Icon(Icons.share_outlined, color: Colors.blue),
+                  title: Text("分享与同步"),
+                  subtitle: Text(
+                    "面对面扫码共享、导出数据文件",
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ShareHubPage()),
+                  ),
+                ),
+
                 SizedBox(height: 20),
                 Center(
                   child: Column(
                     children: [
                       Text(
-                        "DiningTable v1.0.0",
+                        "DiningTable v1.1.0",
                         style: TextStyle(color: Colors.grey[500], fontSize: 13),
                       ),
                       Text(
