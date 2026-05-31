@@ -16,14 +16,28 @@ Theoretically, it supports all of them. Windows and Android have been tested and
 
 <table style="width:100%; table-layout:fixed;">
   <tr>
-    <td style="width:33%; padding:0;">
-      <img src="example/img.png" style="width:100%; display:block;"  alt=""/>
+    <td style="width:50%; padding:0;">
+      <img src="example/img.png"
+           style="width:100%; display:block;"
+           alt="">
     </td>
-    <td style="width:33%; padding:0;">
-      <img src="example/img_1.png" style="width:100%; display:block;"  alt=""/>
+    <td style="width:50%; padding:0;">
+      <img src="example/img_1.png"
+           style="width:100%; display:block;"
+           alt="">
     </td>
-    <td style="width:33%; padding:0;">
-      <img src="example/img_2.png" style="width:100%; display:block;"  alt=""/>
+  </tr>
+
+  <tr>
+    <td style="width:50%; padding:0;">
+      <img src="example/img_2.jpg"
+           style="width:100%; display:block;"
+           alt="">
+    </td>
+    <td style="width:50%; padding:0;">
+      <img src="example/img_3.jpg"
+           style="width:100%; display:block;"
+           alt="">
     </td>
   </tr>
 </table>
